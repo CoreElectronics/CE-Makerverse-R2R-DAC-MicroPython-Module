@@ -1,11 +1,11 @@
-# RV3028 Python Module
+# Makerverse Audio Kit Python Module
 
-This is the firmware repo for the Makerverse [R2R DAC](https://core-electronics.com.au/catalog/product/view/sku/ce08391) Python module.
+This is the firmware repo for the Makerverse [R2R DAC](https://core-electronics.com.au/catalog/product/view/sku/ce08391) Python module, featured in the [Makerverse Audio Kit](https://core-electronics.com.au/catalog/product/view/sku/ce08484)
 
 # Usage
 
-## Example
-[r2r_DAC_example.py] is a simple example to confirm the module is wired correctly. It uses I2C pins sda = GP0 and scl = GP1.
+## Wav File Example
+[playWAV.py] is a simple example to confirm the module is wired correctly. It uses I2C pins sda = GP0 and scl = GP1.
 ```
 from Makerverse_R2R_DAC import wavPlayer
 
@@ -17,7 +17,29 @@ player.mountSD() # Mounts to /sd/ by default
 player.playWav("/sd/example.wav")
 ```
 
-## Details
+## Keyboard Example
+
+## Details - Makerverse_keyboard Class
+
+### Makerverse_Keyboard(rate = 16383)
+
+Makerverse_Keyboard object constructor. Returns a Makerverse_Keyboard object.
+
+The rate can be modified however the 16383Hz default rate is tuned for creating standard Western musical notes tuned to A=440Hz.
+
+It is recommended that the rate not be increased - distortion due to buffer underruns can occur.
+
+This method configures GP16 to GP22, GP26, and GP27 for use with the Makerverse Keyboard for Raspberry Pi Pico. Specifically the pull-down is configured for GP16 to GP26 and GP27 is configured as an output in the HIGH state.
+
+Note that GP27 is used as a "Vcc" for the keyboard. It provides +3.3V to the switches so that pressing a switch reads as a logic 1.
+
+### Makerverse_Keyboard.playSine()
+
+This method continuously scans the keyboard's GPIO pins and generates a different frequency sine wav for each key.
+
+The method is configured for the C-Major scale.
+
+## Details - Makerverse_wavPlayer Class
 
 This module is designed to stream wav files from an SD card (or Raspberry Pi Pico flash memory) to the Makerverse R2R DAC.
 
@@ -105,6 +127,12 @@ player.dac.put(100) # Set the DAC output voltage to 3.3 * 100 / 1023 = 0.3226 V
 ## Attribution
 
 This project adapts code from AWG_v1.py by Rolf Oldeman, published on Instructables: https://www.instructables.com/Arbitrary-Wave-Generator-With-the-Raspberry-Pi-Pic/
+
+Example wav file "sneaky-snitch-by-kevin-macleod-from-filmmusic-io.wav" converted from:
+
+Sneaky Snitch by Kevin MacLeod
+Link: https://incompetech.filmmusic.io/song/4384-sneaky-snitch
+License: https://filmmusic.io/standard-license
 
 ## License
 This project is open source - please review the LICENSE.md file for further licensing information.
