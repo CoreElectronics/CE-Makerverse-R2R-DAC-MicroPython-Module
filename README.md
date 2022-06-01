@@ -5,7 +5,10 @@ This is the firmware repo for the Makerverse [R2R DAC](https://core-electronics.
 # Usage
 
 ## Wav File Example
-[playWAV.py] is a simple example to confirm the module is wired correctly. It uses I2C pins sda = GP0 and scl = GP1.
+[playWAV.py](https://github.com/CoreElectronics/CE-Makerverse-R2R-DAC-MicroPython-Module/blob/main/playWAV.py) demonstrates streaming wav files from an SD card.
+
+It will stream the wav file in real time and player.playWav() will return when the entire file has finished playing.
+
 ```
 from Makerverse_R2R_DAC import wavPlayer
 
@@ -13,11 +16,25 @@ player = Makerverse_wavPlayer()
 
 player.playWav("example.wav")
 
-player.mountSD() # Mounts to /sd/ by default
+player.mountSD(path = '/sd', spiDev = 0, sck=Pin(18), mosi=Pin(19), miso=Pin(16), cs = Pin(17))
+
+# playWav() can also play from Raspberry Pi Pico filesystem but space is very limited
 player.playWav("/sd/example.wav")
 ```
 
 ## Keyboard Example
+
+[keyboard.py](https://github.com/CoreElectronics/CE-Makerverse-R2R-DAC-MicroPython-Module/blob/main/keyboard.py) Turns the Makerverse Audio Kit into an 8-key electronic piano.
+
+keyboard.playSine() contains an infinite loop - it does not return.
+
+```
+from Makerverse_R2R_DAC import Makerverse_Keyboard
+
+keyboard = Makerverse_Keyboard()
+
+keyboard.playSine()
+```
 
 ## Details - Makerverse_keyboard Class
 
