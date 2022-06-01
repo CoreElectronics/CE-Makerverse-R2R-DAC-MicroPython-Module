@@ -119,6 +119,8 @@ This method allows the R2R DAC to be used as a voltage-output DAC. The single ar
 
 Note that the precision of the output voltage is dependent on the accuracy of the Raspberry Pi Pico's 3.3V power supply. Typically this function will have an absolute accuracy of approximately +/-0.05V.
 
+The R2R DAC is a 10-bit DAC so the step size is 3.3/1024 = 3.2mV. The DAC's differential and integral nonlinearities are less than 1 LSB.
+
 Parameter | Type | Default | Description
 --- | --- | --- | ---
 v | Float | - | The voltage to generate with the R2R DAC
