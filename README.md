@@ -16,7 +16,7 @@ player = Makerverse_wavPlayer()
 
 player.playWav("example.wav")
 
-player.mountSD(path = '/sd', spiDev = 0, sck=Pin(18), mosi=Pin(19), miso=Pin(16), cs = Pin(17))
+player.mountSD(path = '/sd', spiDev = 0, sck=Pin(2), mosi=Pin(3), miso=Pin(4), cs = Pin(5))
 
 # playWav() can also play from Raspberry Pi Pico filesystem but space is very limited
 player.playWav("/sd/example.wav")
