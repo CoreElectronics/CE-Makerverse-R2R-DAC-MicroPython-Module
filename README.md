@@ -145,7 +145,7 @@ player.dac.put(100) # Set the DAC output voltage to 3.3 * 100 / 1023 = 0.3226 V
 
 ## Attribution
 
-The MicroPython module (sdcard.py) has been modified from the MicroPython v0.17 release. On reads it polls the card at 0.1ms (down from 1ms) intervals. This was required to obtain read throughput for wav playback at 44.1kHz without buffer underruns.
+The MicroPython module (sdcard.py) has been modified from the MicroPython v0.17 release. When reading it polls the card's busy status at 0.1ms (down from 1ms) intervals. This was required to obtain read throughput for wav playback at 44.1kHz without buffer underruns.
 
 This project adapts code from AWG_v1.py by Rolf Oldeman, published on Instructables: https://www.instructables.com/Arbitrary-Wave-Generator-With-the-Raspberry-Pi-Pic/
 
