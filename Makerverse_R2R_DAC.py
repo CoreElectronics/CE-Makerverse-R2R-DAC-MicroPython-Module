@@ -127,7 +127,7 @@ class Makerverse_wavPlayer():
         
     def mountSD(self, path = '/sd', spiDev = 0, sck=Pin(18), mosi=Pin(19), miso=Pin(16), cs = Pin(17)):
         spi = SPI(spiDev, sck=sck, mosi=mosi, miso=miso)
-        sd = sdcard.SDCard(spi, cs, baudrate=10000000)
+        sd = sdcard.SDCard(spi, cs, baudrate=20000000)
         uos.mount(sd, path)
         
     def playWav(self, fileName):
@@ -208,7 +208,6 @@ class Makerverse_wavPlayer():
                 # Provides approx 5dB boost to spurious free dynamic range
                 sample0 = ((int(x[j+0]) << 2) + ((int(x[j+1]) + 32) >> 6))
                                 
-                #FIXME: Something is wrong with this 16-bit to 10-bit conversion & rounding
                 if sample0 < 512:
                     sample0 = sample0 + 512
                 else: 
@@ -228,3 +227,30 @@ class Makerverse_wavPlayer():
             continue
         # Leave DC value at half scale
         self.dac.put(512)
+
+    def soundboard(self, sounds):
+        n = len(sounds)
+        # Turn on power to keyboard
+        PWR = Pin(27, Pin.OUT)
+        PWR.on()
+        
+        # Enable pull-down on GP16 to GP26
+        for i in range(16, 27):
+            P = Pin(i, Pin.IN, Pin.PULL_DOWN)
+        
+        if ((mem32[0x40014000+16*8] >> 17) & 1) and n > 0:
+            self.playWav(sounds[0]);
+        if ((mem32[0x40014000+17*8] >> 17) & 1) and n > 1:
+            self.playWav(sounds[1]);
+        if ((mem32[0x40014000+18*8] >> 17) & 1) and n > 2:
+            self.playWav(sounds[2]);
+        if ((mem32[0x40014000+19*8] >> 17) & 1) and n > 3:
+            self.playWav(sounds[3]);
+        if ((mem32[0x40014000+20*8] >> 17) & 1) and n > 4:
+            self.playWav(sounds[4]);
+        if ((mem32[0x40014000+21*8] >> 17) & 1) and n > 5:
+            self.playWav(sounds[5]);
+        if ((mem32[0x40014000+22*8] >> 17) & 1) and n > 6:
+            self.playWav(sounds[6]);
+        if ((mem32[0x40014000+26*8] >> 17) & 1) and n > 7:
+            self.playWav(sounds[7]);
