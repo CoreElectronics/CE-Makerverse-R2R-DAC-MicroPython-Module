@@ -113,6 +113,37 @@ mosi | Pin object | Pin(19) | The GPIO pin used for the SPI MOSI (Tx) signal
 miso | Pin object | Pin(16) | The GPIO pin used for the SPI MISO (Rx) signal
 cs | Pin object | Pin(17) | The GPIO pin used for the SPI CS signal
 
+### Makerverse_wavPlayer.soundboard(sounds)
+
+Turns the Makerverse Keyboard for Raspberry Pi Pico into a soundboard with the ability to play one of eight different wav files.
+
+The argument `sounds` is a list of filenames. The first entry is played when the keyboard's button 1 is pressed, the second is played when button 2 is pressed, etc.
+
+The wav files are played to completion before the buttons are read again.
+
+Example, with "drum.wav" and "pluck.wav" loaded into the Raspberry Pi Pico's filesystem:
+
+```
+from Makerverse_R2R_DAC import Makerverse_wavPlayer
+
+player = Makerverse_wavPlayer(buffer=8192)
+
+sounds = ["drum.wav", "pluck.wav"]
+
+while True:
+    player.soundboard(sounds)
+```
+
+The sounds list can include files loaded from the SD card by prefixing the filename with the absolute file path. Eg:
+
+```
+sounds = ["/sd/drum.wav"]
+```
+
+Parameter | Type | Default | Description
+--- | --- | --- | ---
+sounds | List of strings | None | Required, a list of filename strings.
+
 ### Makerverse_wavPlayer.voltage(v)
 
 This method allows the R2R DAC to be used as a voltage-output DAC. The single argument is a value from 0 to 3.3, representing a target output voltage.
