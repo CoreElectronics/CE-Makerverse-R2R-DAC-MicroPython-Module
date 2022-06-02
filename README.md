@@ -19,7 +19,7 @@ player.playWav("example.wav")
 player.mountSD(path = '/sd', spiDev = 0, sck=Pin(2), mosi=Pin(3), miso=Pin(4), cs = Pin(5))
 
 # playWav() can also play from Raspberry Pi Pico filesystem but space is very limited
-player.playWav("/sd/example.wav")
+player.playWav("/sd/sneaky-snitch-by-kevin-macleod-from-filmmusic-io.wav")
 ```
 
 ## Keyboard Example
@@ -144,6 +144,8 @@ player.dac.put(100) # Set the DAC output voltage to 3.3 * 100 / 1023 = 0.3226 V
 ```
 
 ## Attribution
+
+The MicroPython module (sdcard.py) has been modified from the MicroPython v0.17 release. On reads it polls the card at 0.1ms (down from 1ms) intervals. This was required to obtain read throughput for wav playback at 44.1kHz without buffer underruns.
 
 This project adapts code from AWG_v1.py by Rolf Oldeman, published on Instructables: https://www.instructables.com/Arbitrary-Wave-Generator-With-the-Raspberry-Pi-Pic/
 
