@@ -10,16 +10,19 @@ This is the firmware repo for the Makerverse [R2R DAC](https://core-electronics.
 It will stream the wav file in real time and player.playWav() will return when the entire file has finished playing.
 
 ```
-from Makerverse_R2R_DAC import wavPlayer
+from Makerverse_R2R_DAC import WAV_player
 
-player = Makerverse_wavPlayer()
+player = WAV_player()
 
-player.playWav("example.wav")
+# Playing a wav file from the Pico's memory, saved to "root" folder.
+player.play("pluck.wav")
 
-player.mountSD(path = '/sd', spiDev = 0, sck=Pin(2), mosi=Pin(3), miso=Pin(4), cs = Pin(5))
+# Playing a wav file which has been saved to the SD card.
+# First, mount the SD
+player.mountSD(path = '/sd', spi = 0, sck_pin = 2, mosi_pin = 3, miso_pin = 4, cs_pin = 5)
 
-# playWav() can also play from Raspberry Pi Pico filesystem but space is very limited
-player.playWav("/sd/sneaky-snitch-by-kevin-macleod-from-filmmusic-io.wav")
+# Second, play the file. File path includes folder SD card is mounted to.
+player.play("/sd/sneaky-snitch-by-kevin-macleod-from-filmmusic-io.wav")
 ```
 
 ## Keyboard Example
@@ -29,18 +32,18 @@ player.playWav("/sd/sneaky-snitch-by-kevin-macleod-from-filmmusic-io.wav")
 keyboard.playSine() contains an infinite loop - it does not return.
 
 ```
-from Makerverse_R2R_DAC import Makerverse_Keyboard
+from Makerverse_R2R_DAC import keyboard
 
-keyboard = Makerverse_Keyboard()
+keyboard = keyboard()
 
-keyboard.playSine()
+keyboard.play()
 ```
 
-## Details - Makerverse_keyboard Class
+## Details - keyboard Class
 
-### Makerverse_Keyboard(rate = 16383)
+### keyboard(rate = 16383)
 
-Makerverse_Keyboard object constructor. Returns a Makerverse_Keyboard object.
+keyboard object constructor. Returns a keyboard object.
 
 The rate can be modified however the 16383Hz default rate is tuned for creating standard Western musical notes tuned to A=440Hz.
 
@@ -50,13 +53,13 @@ This method configures GP16 to GP22, GP26, and GP27 for use with the Makerverse 
 
 Note that GP27 is used as a "Vcc" for the keyboard. It provides +3.3V to the switches so that pressing a switch reads as a logic 1.
 
-### Makerverse_Keyboard.playSine()
+### keyboard.play()
 
 This method continuously scans the keyboard's GPIO pins and generates a different frequency sine wav for each key.
 
 The method is configured for the C-Major scale.
 
-## Details - Makerverse_wavPlayer Class
+## Details - WAV_player Class
 
 This module is designed to stream wav files from an SD card (or Raspberry Pi Pico flash memory) to the Makerverse R2R DAC.
 
@@ -69,17 +72,16 @@ Size: 4GB or less (limited by the FAT filesystem)
 
 As above, the SD card must be formatted with a FAT filesystem.
 
+### WAV_player(rate = 44100, buffer = 8192)
 
-### Makerverse_wavPlayer(rate = 44100 buffer = 4096)
-
-wavPlayer object constructor. Returns a Makerverse_wavPlayer object.
+WAV_player object constructor. Returns a WAV_player object.
 
 Parameter | Type | Default | Description
 --- | --- | --- | ---
 rate | Integer | 44100 | The initial sample rate of played wav files. The rate is automatically adjusted when playing files of different sample rates.
-buffer | Integer | 4096 | The size of the internal buffers in PCM samples. Each sample is stored as a 16-bit integer and there are two buffers. At least 4\*buffer bytes of RAM are used by this object.
+buffer | Integer | 8192 | The combined length of the two internal buffers, in units of PCM samples. Each sample is stored as a 16-bit integer and there are two buffers. At least 2\*buffer bytes of RAM are used by this object.
 
-### Makerverse_wavPlayer.playWav(fileName)
+### WAV_player.play(fileName)
 
 Play a wav file. The fileName argument should be an absolute file path to a wav file.
 
@@ -98,7 +100,7 @@ Parameter | Type | Default | Description
 --- | --- | --- | ---
 fileName | String | - | Absolute file path to the .wav file to be played.
 
-### Makerverse_wavPlayer.mountSD(path = '/sd', spiDev = 0, sck=Pin(18), mosi=Pin(19), miso=Pin(16), cs = Pin(17))
+### WAV_player.mountSD(path = '/sd', spi = 0, sck_pin = 18, mosi_pin = 19, miso_pin = 16, cs_pin = 17)
 
 Mount the SD card to the MicroPython filesystem. Wave files stored on the SD card can then be read with the standard built-in functions open() and read().
 
@@ -107,13 +109,13 @@ Due to the R2R DAC occupying GPIO pins GP6 to GP15 the SD card's SPI interface m
 Parameter | Type | Default | Description
 --- | --- | --- | ---
 path | String | '/sd' | The filesystem path where the SD card will be mounted.
-spiDev | Integer | 0 | The SPI peripheral to use. This should always be set to 0 but can be set to 1 if this function is used without the DAC (ie: if GPIOs GP7 to GP15 are available)
-sck | Pin object | Pin(18) | The GPIO pin used for the SPI clock signal
-mosi | Pin object | Pin(19) | The GPIO pin used for the SPI MOSI (Tx) signal
-miso | Pin object | Pin(16) | The GPIO pin used for the SPI MISO (Rx) signal
-cs | Pin object | Pin(17) | The GPIO pin used for the SPI CS signal
+spi | Integer | 0 | The SPI peripheral to use. This should always be set to 0 but can be set to 1 if this function is used without the DAC (ie: if GPIOs GP7 to GP15 are available)
+sck_pin | Pin object | 18 | The GPIO pin used for the SPI clock signal
+mosi_pin | Pin object | 19 | The GPIO pin used for the SPI MOSI (Tx) signal
+miso_pin | Pin object | 16 | The GPIO pin used for the SPI MISO (Rx) signal
+cs_pin | Pin object | 17 | The GPIO pin used for the SPI CS signal
 
-### Makerverse_wavPlayer.soundboard(sounds)
+### WAV_player.soundboard(sounds)
 
 Turns the Makerverse Keyboard for Raspberry Pi Pico into a soundboard with the ability to play one of eight different wav files.
 
@@ -124,9 +126,9 @@ The wav files are played to completion before the buttons are read again.
 Example, with "drum.wav" and "pluck.wav" loaded into the Raspberry Pi Pico's filesystem:
 
 ```
-from Makerverse_R2R_DAC import Makerverse_wavPlayer
+from Makerverse_R2R_DAC import WAV_player
 
-player = Makerverse_wavPlayer(buffer=8192)
+player = WAV_player(buffer=8192)
 
 sounds = ["drum.wav", "pluck.wav"]
 
@@ -144,7 +146,7 @@ Parameter | Type | Default | Description
 --- | --- | --- | ---
 sounds | List of strings | None | Required, a list of filename strings.
 
-### Makerverse_wavPlayer.voltage(v)
+### WAV_player.voltage(v)
 
 This method allows the R2R DAC to be used as a voltage-output DAC. The single argument is a value from 0 to 3.3, representing a target output voltage.
 
@@ -156,20 +158,20 @@ Parameter | Type | Default | Description
 --- | --- | --- | ---
 v | Float | - | The voltage to generate with the R2R DAC
 
-### Makerverse_wavPlayer.dac.put()
+### WAV_player.dac.put()
 
 This is a low-level method which writes a single output value to the DAC via the PIO.
 
-Using this method allows for the Makerverse_wavPlayer module to be used as a general purpose DAC with a bandwidth of 1MHz (limited by the MCP6001 op-amp on the DAC PCB).
+Using this method allows for the WAV_player module to be used as a general purpose DAC with a bandwidth of 1MHz (limited by the MCP6001 op-amp on the DAC PCB).
 
 This method will accept any 32-bit value but only the 10 LSBs will be used. The valid decimal input range is therefore 0 to 1023, inclusive, producing voltages from 0 to 3.3 V.
 
 Example:
 
 ```
-from Makerverse_R2R_DAC import wavPlayer
+from Makerverse_R2R_DAC import WAV_player
 
-player = Makerverse_wavPlayer()
+player = WAV_player()
 
 player.dac.put(100) # Set the DAC output voltage to 3.3 * 100 / 1023 = 0.3226 V
 ```

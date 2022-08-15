@@ -1,5 +1,5 @@
-from Makerverse_R2R_DAC import Makerverse_Keyboard
+from Makerverse_R2R_DAC import keyboard
 
-keyboard = Makerverse_Keyboard()
+keyboard = keyboard()
 
-keyboard.playSine()
+keyboard.play()
