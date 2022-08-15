@@ -127,7 +127,7 @@ class WAV_player():
         
     def mountSD(self, path = '/sd', spi = 0, sck_pin = 18, mosi_pin = 19, miso_pin = 16, cs_pin = 17):
         spi = SPI(spi, sck=Pin(sck_pin), mosi = Pin(mosi_pin), miso = Pin(miso_pin))
-        sd = sdcard.SDCard(spi, cs_pin, baudrate = 20000000)
+        sd = sdcard.SDCard(spi, Pin(cs_pin), baudrate = 20000000)
         uos.mount(sd, path)
         
     def play(self, fileName):
