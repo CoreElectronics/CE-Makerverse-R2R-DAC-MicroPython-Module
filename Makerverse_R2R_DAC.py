@@ -239,18 +239,18 @@ class WAV_player():
             P = Pin(i, Pin.IN, Pin.PULL_DOWN)
         
         if ((mem32[0x40014000+16*8] >> 17) & 1) and n > 0:
-            self.playWav(sounds[0]);
+            self.play(sounds[0]);
         if ((mem32[0x40014000+17*8] >> 17) & 1) and n > 1:
-            self.playWav(sounds[1]);
+            self.play(sounds[1]);
         if ((mem32[0x40014000+18*8] >> 17) & 1) and n > 2:
-            self.playWav(sounds[2]);
+            self.play(sounds[2]);
         if ((mem32[0x40014000+19*8] >> 17) & 1) and n > 3:
-            self.playWav(sounds[3]);
+            self.play(sounds[3]);
         if ((mem32[0x40014000+20*8] >> 17) & 1) and n > 4:
-            self.playWav(sounds[4]);
+            self.play(sounds[4]);
         if ((mem32[0x40014000+21*8] >> 17) & 1) and n > 5:
-            self.playWav(sounds[5]);
+            self.play(sounds[5]);
         if ((mem32[0x40014000+22*8] >> 17) & 1) and n > 6:
-            self.playWav(sounds[6]);
+            self.play(sounds[6]);
         if ((mem32[0x40014000+26*8] >> 17) & 1) and n > 7:
-            self.playWav(sounds[7]);
+            self.play(sounds[7]);
